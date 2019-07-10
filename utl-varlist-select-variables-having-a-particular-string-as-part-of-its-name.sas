@@ -1,4 +1,4 @@
-%let pgm=utl-varlist-select-variables-having-a-particular-string-as-part-of-its-name                                             
+%let pgm=utl-varlist-select-variables-having-a-particular-string-as-part-of-its-name;                                            
                                                                                                                                  
 Select variables that contain a particular string as part of its name;                                                           
                                                                                                                                  
@@ -20,6 +20,12 @@ In this case variable names that contain '_3'
                                                                                                                                  
                Keintz, Mark                                                                                                      
                mkeintz@wharton.upenn.edu                                                                                         
+                                                                                                                                 
+          e.   Using Bart Jablonski's more flexible code generator                                                               
+                                                                                                                                 
+               Bartosz Jablonski                                                                                                 
+               yabwon@gmail.com                                                                                                  
+                                                                                                                                 
                                                                                                                                  
 This is very heavily tested macro. I have used it hundreds of tmes.                                                              
 varlist macro ( this a very flexible macro)                                                                                      
@@ -222,4 +228,46 @@ run;
                                                                                                                                  
 Also the CALL VNEXT approach preserves original variable order.                                                                  
                                                                                                                                  
+*    _      ____             _                                                                                                   
+  __| |    | __ )  __ _ _ __| |_                                                                                                 
+ / _` |    |  _ \ / _` | '__| __|                                                                                                
+| (_| |_   | |_) | (_| | |  | |_                                                                                                 
+ \__,_(_)  |____/ \__,_|_|   \__|                                                                                                
+                                                                                                                                 
+;                                                                                                                                
+                                                                                                                                 
+More flexibal code generator by                                                                                                  
+                                                                                                                                 
+Bartosz Jablonski                                                                                                                
+yabwon@gmail.com                                                                                                                 
+                                                                                                                                 
+Bart                                                                                                                             
+                                                                                                                                 
+filename f URL "http://www.mini.pw.edu.pl/~bjablons/SASpublic/array.sas";                                                        
+%include f;                                                                                                                      
+filename f;                                                                                                                      
+                                                                                                                                 
+filename f URL "http://www.mini.pw.edu.pl/~bjablons/SASpublic/do_over.sas";                                                      
+%include f;                                                                                                                      
+filename f;                                                                                                                      
+                                                                                                                                 
+data have;                                                                                                                       
+input                                                                                                                            
+Obs    (X1    X2    X3    X4    X5    X6    X7    X8    X9    X10    X11    X12) ($);                                            
+cards;                                                                                                                           
+ 1     C     C     C     C     C     C     C     C     C      C      C      C                                                    
+ 2     C     C     C     C     C     C     C     C     C      C      C      C                                                    
+;                                                                                                                                
+run;                                                                                                                             
+                                                                                                                                 
+%barray(ABC[12] $ 32                                                                                                             
+, function = cats('x',_I_,'=ifc(x',_I_,'="C","2",x',_I_,');')                                                                    
+, macarray=Y)                                                                                                                    
+                                                                                                                                 
+options mprint;                                                                                                                  
+data want;                                                                                                                       
+ set have;                                                                                                                       
+ %bdo_over(ABC);                                                                                                                 
+run;                                                                                                                             
+                                                                                                        
                                                                                                                                  
